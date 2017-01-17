@@ -1,0 +1,21 @@
+var express = require("express");
+const PORT = process.env.PORT || 3000;
+
+// Create our app
+var app = express();
+
+// openweather only accept http request
+app.use(function (req, res, next) {
+    // localhost: does not have req.headers["x-forwarded-proto"]
+    if (req.headers["x-forwarded-proto"] === "https") {
+        res.redirect("http://" + req.hostname + req.url);
+    } else {
+        next();
+    }
+});
+
+app.use(express.static("public"));
+
+app.listen(PORT, function () {
+     console.log("Express server is up on port " + PORT)
+});
