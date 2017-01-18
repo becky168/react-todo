@@ -4,7 +4,7 @@ var path = require("path"); // built in node.js, there's no need to install it.
 module.exports = {
     // entry: "./app/app.jsx", // tell webpack where to start our code
                                // by default, webpack 不認識 jsx, 所以要用 babel-loader
-    entry: [ 
+    entry: [
         // 程式一開始先load 下列的file (按照順序=>jquery=>foundation=>app.jsx)
         // .js => are regular script file, are not packaged for webpack
         //        so we need js-loader (script!) to handle them
@@ -55,8 +55,16 @@ module.exports = {
         filename: "./public/bundle.js"
     },
     resolve: {
-        root: __dirname, // root必須是絕對路徑, 是通过绝对路径的方式来定义查找模块的文件夹
-                         // resolve.root only spcifies the resolving for modules
+        // root必須是絕對路徑, 是通过绝对路径的方式来定义查找模块的文件夹
+        // resolve.root only spcifies the resolving for modules
+        root: __dirname,
+        // 使用 moduleDirectories,
+        // 只要有設定在該陣列裡的路徑, 就可以不用在 alias 中設定每個路徑
+        // EX: 設定 app/components, 就不用在 alias 再去設定每個 components 路徑下的檔案
+        modulesDirectories: [
+            "node_modules", // provided by default
+            "./app/components"
+        ],
         alias: {
             applicationStyles: "app/styles/app.scss"
         },

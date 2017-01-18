@@ -1,6 +1,7 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
 var {Route, Router, IndexRoute, hashHistory} = require("react-router");
+var TodoApp = require("TodoApp");
 
 // require the css that the component need only inside the component
 // Load fundation
@@ -50,6 +51,6 @@ path 是對應 URL 的規則。
 PS. IndexRoute does not have path
 */
 ReactDOM.render(
-    <p>Boilerplate 3 Project</p>,
+    <TodoApp/>,
     document.getElementById("app")
 );
