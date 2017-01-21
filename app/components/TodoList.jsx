@@ -14,7 +14,7 @@ var TodoList = React.createClass({
                 //           它是把已有的props物件值展開來指定這個元件中
                 //           pass down every attribute in the todo object
                 //           as props to the react component without explicity defined everything
-                return <Todo key={todo.id} {...todo}/>
+                return <Todo key={todo.id} {...todo} onToggle={this.props.onToggle}/>
             });
         };
 
