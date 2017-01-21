@@ -63,7 +63,8 @@ module.exports = {
         // EX: 設定 app/components, 就不用在 alias 再去設定每個 components 路徑下的檔案
         modulesDirectories: [
             "node_modules", // provided by default
-            "./app/components"
+            "./app/components",
+            "./app/api"
         ],
         alias: {
             applicationStyles: "app/styles/app.scss"
