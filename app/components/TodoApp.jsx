@@ -1,6 +1,7 @@
 // third-party module
 var React = require("react");
 var uuid = require("node-uuid"); // universally unique identifier 惟一标识符 -->> uid
+var moment = require("moment");
 
 // module write by ourselves
 var TodoList = require("TodoList");
@@ -43,7 +44,9 @@ var TodoApp = React.createClass({
                 {
                     id: uuid(), // guaranteed to be unique, generate random id
                     text,
-                    completed: false
+                    completed: false,
+                    createdAt: moment().unix(),
+                    completedAt: undefined
                 }
             ]
         });
@@ -55,6 +58,7 @@ var TodoApp = React.createClass({
         var updatedTodo = this.state.todos.map((todo) => {
             if (todo.id === id) {
                 todo.completed = !todo.completed;
+                todo.completedAt = todo.completed ? moment().unix() : undefined;
             }
             return todo;
         });
