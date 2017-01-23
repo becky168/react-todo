@@ -6,3 +6,6 @@
 @include foundation-everything; // in "./node_modules/foundation-sites/scss/foundation.scss"
 
 // Components
+@import "components/container";
+@import "components/page-title";
+@import "components/todo";
