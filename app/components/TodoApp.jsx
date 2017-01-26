@@ -3,9 +3,12 @@ var React = require("react");
 var uuid = require("node-uuid"); // universally unique identifier 惟一标识符 -->> uid
 var moment = require("moment");
 
-// module write by ourselves
-var TodoList = require("TodoList");
-var AddTodo = require("AddTodo");
+/* module write by ourselves */
+// var TodoList = require("TodoList");
+import TodoList from "TodoList";
+// var AddTodo = require("AddTodo");
+/* import the component that connectted to the redux store */
+import AddTodo from "AddTodo";
 var TodoSearch = require("TodoSearch");
 var TodoAPI = require("TodoAPI");
 
@@ -54,19 +57,19 @@ var TodoApp = React.createClass({
     componentDidUpdate: function (prevProps, prevState) {
         TodoAPI.setTodos(this.state.todos);
     },
-    handleToggle: function (id) {
-        var updatedTodo = this.state.todos.map((todo) => {
-            if (todo.id === id) {
-                todo.completed = !todo.completed;
-                todo.completedAt = todo.completed ? moment().unix() : undefined;
-            }
-            return todo;
-        });
+    // handleToggle: function (id) {
+    //     var updatedTodo = this.state.todos.map((todo) => {
+    //         if (todo.id === id) {
+    //             todo.completed = !todo.completed;
+    //             todo.completedAt = todo.completed ? moment().unix() : undefined;
+    //         }
+    //         return todo;
+    //     });
 
-        this.setState({
-            todos: updatedTodo
-        });
-    },
+    //     this.setState({
+    //         todos: updatedTodo
+    //     });
+    // },
     handleSearch: function (showCompleted, searchText) {
         this.setState({
             showCompleted: showCompleted,
@@ -84,7 +87,8 @@ var TodoApp = React.createClass({
                     <div className="column small-centered small-11 medium-6 large-5">
                         <div className="container">
                             <TodoSearch onSearch={this.handleSearch} />
-                            <TodoList todos={filteredTodos} onToggle={this.handleToggle}/>
+                            {/*<TodoList todos={filteredTodos} onToggle={this.handleToggle}/>*/}
+                            <TodoList />{/*TodoList can get the state itself and dispatch its own actions*/}
                             <AddTodo onAddTodo={this.handleAddTodo} />
                         </div>
                     </div>

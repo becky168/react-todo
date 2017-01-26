@@ -1,5 +1,11 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
+/**
+ * Provider : let you provide your store to its children
+ * Provider 是使用在應用程式的根元件內，負責將唯一的 store 傳下去給其他子元件。
+ * only need in the root of our application
+ */
+var {Provider} = require("react-redux");
 var {Route, Router, IndexRoute, hashHistory} = require("react-router");
 
 var TodoApp = require("TodoApp");
@@ -62,7 +68,17 @@ path 是對應 URL 的規則。
 
 PS. IndexRoute does not have path
 */
+
+/*
+Provider:
+    put any components inside to have access to our store
+    In this case, we put TodoAPP to render entire application
+    so the TodoApp component as well as all it children
+    are going to able to access the data on the store as well as dispatch actions
+*/
 ReactDOM.render(
-    <TodoApp/>,
+    <Provider store={store}>
+        <TodoApp/>
+    </Provider>,
     document.getElementById("app")
 );
