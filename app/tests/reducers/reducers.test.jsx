@@ -16,7 +16,7 @@ describe ("Reducers", () => {
              * because we need to reduce dependency on other module
              */
             var action = {
-                type: "SET_SEATCH_TEXT",
+                type: "SET_SEARCH_TEXT",
                 searchText: "dog"
             };
             // var res = reducers.searchTextReducer("", action);
@@ -73,6 +73,26 @@ describe ("Reducers", () => {
 
             expect(res[0].completed).toEqual(false);
             expect(res[0].completedAt).toEqual(undefined);
+        });
+
+        it ("should add existing todos", () => {
+            var todos = [{
+                id: "111",
+                text: "anything",
+                completed: false,
+                completedAt: undefined,
+                createdAt: 33000
+            }];
+
+            var action = {
+                type: "ADD_TODOS",
+                todos
+            };
+
+            var res = reducers.todosReducer(df([]), df(action));
+
+            expect(res.length).toEqual(1);
+            expect(res[0]).toEqual(todos[0]);
         });
     });
 });

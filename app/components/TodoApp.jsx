@@ -11,53 +11,57 @@ import TodoList from "TodoList";
 import AddTodo from "AddTodo";
 // var TodoSearch = require("TodoSearch");
 import TodoSearch from "TodoSearch";
-var TodoAPI = require("TodoAPI");
+// var TodoAPI = require("TodoAPI");
 
 var TodoApp = React.createClass({
-    getInitialState: function () {
-        return {
-            showCompleted: false,
-            searchText: "",
-            todos: TodoAPI.getTodos()
-            // todos: [
-            //     {
-            //         id: uuid(),
-            //         text: "Walk the dog",
-            //         completed: false
-            //     }, {
-            //         id: uuid(),
-            //         text: "Clean the yard",
-            //         completed: true
-            //     }, {
-            //         id: uuid(),
-            //         text: "Leave mail on porch",
-            //         completed: true
-            //     }, {
-            //         id: uuid(),
-            //         text: "Play video games",
-            //         completed: false
-            //     }
-            // ]
-        };
-    },
-    handleAddTodo: function (text) {
-        // alert(`new todo: ${text}`);
-        this.setState({
-            todos: [
-                ...this.state.todos,
-                {
-                    id: uuid(), // guaranteed to be unique, generate random id
-                    text,
-                    completed: false,
-                    createdAt: moment().unix(),
-                    completedAt: undefined
-                }
-            ]
-        });
-    },
-    componentDidUpdate: function (prevProps, prevState) {
-        TodoAPI.setTodos(this.state.todos);
-    },
+    /* state is handled by redux store, it not maintain state itself,
+     * so this life cycle is no need */
+    // getInitialState: function () {
+    //     return {
+    //         showCompleted: false,
+    //         searchText: "",
+    //         todos: TodoAPI.getTodos()
+    //         // todos: [
+    //         //     {
+    //         //         id: uuid(),
+    //         //         text: "Walk the dog",
+    //         //         completed: false
+    //         //     }, {
+    //         //         id: uuid(),
+    //         //         text: "Clean the yard",
+    //         //         completed: true
+    //         //     }, {
+    //         //         id: uuid(),
+    //         //         text: "Leave mail on porch",
+    //         //         completed: true
+    //         //     }, {
+    //         //         id: uuid(),
+    //         //         text: "Play video games",
+    //         //         completed: false
+    //         //     }
+    //         // ]
+    //     };
+    // },
+    /* handle by reducer and actions */
+    // handleAddTodo: function (text) {
+    //     // alert(`new todo: ${text}`);
+    //     this.setState({
+    //         todos: [
+    //             ...this.state.todos,
+    //             {
+    //                 id: uuid(), // guaranteed to be unique, generate random id
+    //                 text,
+    //                 completed: false,
+    //                 createdAt: moment().unix(),
+    //                 completedAt: undefined
+    //             }
+    //         ]
+    //     });
+    // },
+    /* state is handled by redux store, so this life cycle is no need */
+    // componentDidUpdate: function (prevProps, prevState) {
+    //     TodoAPI.setTodos(this.state.todos);
+    // },
     // handleToggle: function (id) {
     //     var updatedTodo = this.state.todos.map((todo) => {
     //         if (todo.id === id) {
@@ -71,15 +75,15 @@ var TodoApp = React.createClass({
     //         todos: updatedTodo
     //     });
     // },
-    handleSearch: function (showCompleted, searchText) {
-        this.setState({
-            showCompleted: showCompleted,
-            searchText: searchText.toLowerCase()
-        });
-    },
+    // handleSearch: function (showCompleted, searchText) {
+    //     this.setState({
+    //         showCompleted: showCompleted,
+    //         searchText: searchText.toLowerCase()
+    //     });
+    // },
     render: function () {
-        var {todos, showCompleted, searchText} = this.state;
-        var filteredTodos = TodoAPI.filterTodos(todos, showCompleted, searchText);
+        // var {todos, showCompleted, searchText} = this.state;
+        // var filteredTodos = TodoAPI.filterTodos(todos, showCompleted, searchText);
         return (
             <div>
                 <h1 className="page-title">Todo App</h1>
@@ -87,10 +91,14 @@ var TodoApp = React.createClass({
                 <div className="row">
                     <div className="column small-centered small-11 medium-6 large-5">
                         <div className="container">
-                            <TodoSearch onSearch={this.handleSearch} />
-                            {/*<TodoList todos={filteredTodos} onToggle={this.handleToggle}/>*/}
+                            {/*
+                              *<TodoSearch onSearch={this.handleSearch} />
+                              *<TodoList todos={filteredTodos} onToggle={this.handleToggle}/>
+                              *<AddTodo onAddTodo={this.handleAddTodo} />
+                              */}
+                            <TodoSearch />
                             <TodoList />{/*TodoList can get the state itself and dispatch its own actions*/}
-                            <AddTodo onAddTodo={this.handleAddTodo} />
+                            <AddTodo />
                         </div>
                     </div>
                 </div>
