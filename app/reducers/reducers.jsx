@@ -3,7 +3,7 @@ var moment = require("moment");
 
 export var searchTextReducer = (state = "", action) => {
     switch (action.type) {
-        case "SET_SEATCH_TEXT":
+        case "SET_SEARCH_TEXT":
             return action.searchText;
         default:
             return state;

@@ -56,5 +56,47 @@ export var Todo = React.createClass({
 /**
  * export a connectify component
  * expect a store to exist
+ * 
+ * react-redux 提供了两个重要的对象，Provider 和 connect，
+ * 前者使 React 组件可被连接（connectable），
+ * 后者把 React 组件和 Redux 的 store 真正连接起来。
+ *
+ * Provider 内的任何一个组件（比如这里的 Comp），如果需要使用 state 中的数据，
+ * 就必须是「被 connect 过的」组件——使用 connect 方法对「你编写的组件（MyComp）」进行包装后的产物。
+ *
+ *
+ * Resources: http://taobaofed.org/blog/2016/08/18/react-redux-connect/
+ *
+ * connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
+ *
+ *      mapStateToProps(state, ownProps) : stateProps
+
+            这个函数允许我们将 store 中的数据作为 props 绑定到组件上。
+
+            const mapStateToProps = (state) => {
+              return {
+                count: state.count
+              }
+            }
+            这个函数的第一个参数就是 Redux 的 store，
+            我们从中摘取了 count 属性。
+            因为返回了具有 count 属性的对象，所以 MyComp 会有名为 count 的 props 字段。
+
+            class MyComp extends Component {
+              render(){
+                return <div>计数：{this.props.count}次</div>
+              }
+            }
+
+            const Comp = connect(...args)(MyComp);
+
+            当然，你不必将 state 中的数据原封不动地传入组件，
+            可以根据 state 中的数据，动态地输出组件需要的（最小）属性。
+
+            const mapStateToProps = (state) => {
+              return {
+                greaterThanFive: state.count > 5
+              }
+            }
  */
 export default connect()(Todo);

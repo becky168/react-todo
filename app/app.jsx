@@ -17,9 +17,12 @@ store.subscribe(() => {
     console.log("New State", store.getState());
 });
 
-store.dispatch(actions.addTodo("Clean the yard"));
-store.dispatch(actions.setSearchText("yard"));
-store.dispatch(actions.toggleShowCompleted());
+/**
+ * default value
+ */
+// store.dispatch(actions.addTodo("Clean the yard"));
+// store.dispatch(actions.setSearchText("yard"));
+// store.dispatch(actions.toggleShowCompleted());
 
 // require the css that the component need only inside the component
 // Load fundation
