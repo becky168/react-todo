@@ -24,13 +24,14 @@ export var todosReducer = (state = [], action) => {
         case "ADD_TODO":
             return [
                 ...state,
-                {
-                    id: uuid(),
-                    text: action.text,
-                    completed: false,
-                    createdAt: moment().unix(),
-                    completedAt: undefined
-                }
+                // {
+                //     id: uuid(),
+                //     text: action.text,
+                //     completed: false,
+                //     createdAt: moment().unix(),
+                //     completedAt: undefined
+                // }
+                action.todo// to save to the firebase
             ];
         case "TOGGLE_TODO":
             return state.map((todo) => {
