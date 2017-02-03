@@ -1,6 +1,30 @@
 var webpack = require("webpack");
 var path = require("path"); // built in node.js, there's no need to install it.
 
+/*
+ * 通过NODE_ENV可以来设置环境变量（默认值为development）
+ * 一般我们通过检查这个值来分别对开发环境和生产环境下做不同的处理
+ * 
+ * 在 webpack 中 run 的時候, 打下列指令:
+ *   NODE_ENV = production webpack
+ *   就可以用 production 的環境來編譯
+ *   
+ *   若加上 p flag, 會更加減少 file size:
+ *   NODE_ENV = production webpack -p
+ *   
+ *   使用 p flag 可能會有很多 warning 在編譯的時候出現
+ *   我們可以加上 plugin 來解決這個情況
+ *   plugins: [
+ *      new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: false
+            }
+        })
+ *   ]
+ *   
+ */
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
+
 module.exports = {
     // entry: "./app/app.jsx", // tell webpack where to start our code
                                // by default, webpack 不認識 jsx, 所以要用 babel-loader
@@ -48,6 +72,11 @@ module.exports = {
         new webpack.ProvidePlugin({
             "$": "jquery",
             "jQuery": "jquery"
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: false
+            }
         })
     ],
     output: {
@@ -132,8 +161,15 @@ module.exports = {
             path.resolve(__dirname, "./node_modules/foundation-sites/scss")
         ]
     },
-    // This will auto create a source map that browser understand for us to debug
-    // use source map, we will debug in the raw file(原始的file)
-    // and run in the compiled file(bundle.js)
-    devtool: "cheap-module-eval-source-map"
+    /*
+     * This will auto create a source map that browser understand for us to debug
+     * use source map, we will debug in the raw file(原始的file)
+     * and run in the compiled file(bundle.js)
+     */
+    // devtool: "cheap-module-eval-source-map"
+    /*
+     * only enable in development envirment,
+     * this will reduce our file size in production
+     */
+    devtool: process.env.NODE_ENV === "production" ? undefined : "cheap-module-eval-source-map"
 };
