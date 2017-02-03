@@ -33,15 +33,30 @@ export var todosReducer = (state = [], action) => {
                 // }
                 action.todo// to save to the firebase
             ];
-        case "TOGGLE_TODO":
+        // case "TOGGLE_TODO":
+        //     return state.map((todo) => {
+        //         if (todo.id === action.id) {
+        //             var nextCompleted = !todo.completed;
+
+        //             return {
+        //                 ...todo,
+        //                 completed: nextCompleted,
+        //                 completedAt: nextCompleted ? moment().unix() : undefined
+        //             };
+        //         } else {
+        //             return todo;
+        //         }
+        //     });
+        case "UPDATE_TODO":
             return state.map((todo) => {
                 if (todo.id === action.id) {
-                    var nextCompleted = !todo.completed;
-
                     return {
                         ...todo,
-                        completed: nextCompleted,
-                        completedAt: nextCompleted ? moment().unix() : undefined
+                        ...action.updates 
+                        /* 
+                         * when you use one spread operator after another,
+                         * everything from the second one will override the first one
+                         */
                     };
                 } else {
                     return todo;
