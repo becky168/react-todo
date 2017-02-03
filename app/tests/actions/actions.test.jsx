@@ -70,8 +70,9 @@ describe("Actions", () => {
              */
             /*
              * getActions: 
-             * return an array with all of the action we fire on the mock store
-             * designed for mock store
+             * Return an array with all of the action we fire on the mock store
+             *  since the store is created.
+             * It is designed for mock store
              */
             const actions = store.getActions();
             expect(actions[0]).toInclude({
@@ -138,16 +139,30 @@ describe("Actions", () => {
          *  define some code to run before every single test
          */
         beforeEach((done) => {
-            testTodoRef = firebaseRef.child("todo").push();
+            // testTodoRef = firebaseRef.child("todos").push();
 
-            testTodoRef.set({
-                text: "Something to do",
-                completed: false,
-                createdAt: 23453453
-            }).then(() => {
-                done(); // move to the actual test case
-            });
-            /* 可以直接寫成 .then(() => done()) */
+            // testTodoRef.set({
+            //     text: "Something to do",
+            //     completed: false,
+            //     createdAt: 23453453
+            // }).then(() => {
+            //     done(); // move to the actual test case
+            // });
+            // /* 可以直接寫成 .then(() => done()) */
+
+            var todosRef = firebaseRef.child("todos");
+            /* 先移除現有的資料再增加測試的資料 */
+            todosRef.remove().then(() => {
+                testTodoRef = firebaseRef.child("todos").push();
+
+                return testTodoRef.set({
+                    text: "Something to do",
+                    completed: false,
+                    createdAt: 23453453
+                })
+            })
+            .then(() => done()) // testTodoRef.set 的 promise
+            .catch(done);
         });
         /*
          * afterEach:
@@ -181,6 +196,21 @@ describe("Actions", () => {
              * it will assume the test failed and
              * will print the argument to the screen with error message
              */
+        });
+
+        it ("should populate todos and dispatch ADD_TODOS", (done) => {
+            const store = createMockStore({});
+            const action = actions.startAddTodos();
+
+            store.dispatch(action).then(() => {
+                const mockActions = store.getActions();
+
+                expect(mockActions[0].type).toEqual("ADD_TODOS");
+                expect(mockActions[0].todos.length).toEqual(1);
+                expect(mockActions[0].todos[0].text).toEqual("Something to do");
+
+                done();
+            }, done);
         });
     });
 });

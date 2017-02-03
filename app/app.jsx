@@ -18,15 +18,22 @@ var TodoAPI = require("TodoAPI");
 /* test for firebase */
 // import "./../playground/firebase/index";
 
-store.subscribe(() => {
-    var state = store.getState();
-    console.log("New State", state);
+/***** Initial Settings: save data in localstorage *****/
+// store.subscribe(() => {
+//     var state = store.getState();
+//     console.log("New State", state);
 
-    TodoAPI.setTodos(state.todos);
-});
+//     TodoAPI.setTodos(state.todos);
+// });
 
-var initialTodos = TodoAPI.getTodos();
-store.dispatch(actions.addTodos(initialTodos));
+// var initialTodos = TodoAPI.getTodos();
+// store.dispatch(actions.addTodos(initialTodos));
+
+/***** Initial Settings: save data in firebase *****/
+/*
+ * get all of the data from firebase and pass it to the store
+ */
+store.dispatch(actions.startAddTodos());
 
 /**
  * default value

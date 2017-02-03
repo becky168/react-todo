@@ -21,7 +21,9 @@ export var TodoList = React.createClass({
         var {todos, showCompleted, searchText} = this.props;
         var renderTodos = () => {
 
-            if (todos.length === 0) {
+            var filteredTodos = TodoAPI.filterTodos(todos, showCompleted, searchText);
+            // if (todos.length === 0) {
+            if (filteredTodos.length === 0) {
                 return (
                     <p className="container__message">Nothing To Do</p>
                 );
@@ -47,7 +49,7 @@ export var TodoList = React.createClass({
             //     return <Todo key={todo.id} {...todo}/>
             // });
 
-            return TodoAPI.filterTodos(todos, showCompleted, searchText).map((todo) => {
+            return filteredTodos.map((todo) => {
                 /* when you iterate over an array and generate multiple instances of component
                 // you have to give them a unique key prop
                 // this key prop is used internally by react to keep track of the individual component
