@@ -4,7 +4,7 @@ import moment from "moment";
  * 於 webpack.config.js 中有設 alias: {app: "app"}
  * 所以可以直接設置 app 底下的路徑
  */
-import firebase, {firebaseRef} from "app/firebase/"; // index.js 可省略
+import firebase, {firebaseRef, githubProvider} from "app/firebase/"; // index.js 可省略
 
 export var setSearchText = (searchText) => {
     return {
@@ -111,6 +111,32 @@ export var startToggleTodo = (id, completed) => {
         /* return promise */
         return todoRef.update(updates).then(() => {
             dispatch(updateTodo(id, updates));
+        });
+    };
+};
+
+export var startLogin = () => {
+    return (dispatch, getState) => {
+        /**
+         * .auth()
+         * will return a series of the authentication related function
+         *
+         * signInWithPopup(provider):
+         * To sign in with a pop-up window
+         * provider: let firebase know which plateform we want to login with
+         */
+        return firebase.auth().signInWithPopup(githubProvider).then((result) => {
+            console.log("Auth worked!", result);
+        }, (error) => {
+            console.log("Unable to auth", error);
+        });
+    };
+};
+
+export var startLogout = () => {
+    return (dispatch, getState) => {
+        return firebase.auth().signOut().then(() => {
+            console.log("Logged out!");
         });
     };
 };

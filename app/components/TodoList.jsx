@@ -116,6 +116,7 @@ export var TodoList = React.createClass({
 // )(TodoList);
 
 export default connect(
+    /* connect argument: conver the redux state to the props */
     /**
      * state: is the complete state of the app
      * {

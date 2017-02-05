@@ -21,6 +21,10 @@ try {
     firebase.initializeApp(config);
 } catch (e) {}
 
+/*
+ * The provider make firebase to know which social plateform you use.
+ */
+export var githubProvider = new firebase.auth.GithubAuthProvider();
 export var firebaseRef = firebase.database().ref();
 /**
  * export default root firebase:

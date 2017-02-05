@@ -6,7 +6,8 @@ var expect = require("expect");
 var $ = require("jquery");
 
 var configureStore = require("configureStore");
-var TodoApp = require("TodoApp");
+// var TodoApp = require("TodoApp");
+import {TodoApp} from "TodoApp"; // import the one not default using ES6 destructuring
 // var TodoList = require("TodoList");
 import TodoList from "TodoList";
 

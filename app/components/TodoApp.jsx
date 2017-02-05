@@ -1,7 +1,10 @@
 // third-party module
-var React = require("react");
-var uuid = require("node-uuid"); // universally unique identifier 惟一标识符 -->> uid
-var moment = require("moment");
+// var React = require("react");
+import React from "react";
+import * as Redux from "react-redux";
+
+// var uuid = require("node-uuid"); // universally unique identifier 惟一标识符 -->> uid
+// var moment = require("moment");
 
 /* module write by ourselves */
 // var TodoList = require("TodoList");
@@ -12,8 +15,9 @@ import AddTodo from "AddTodo";
 // var TodoSearch = require("TodoSearch");
 import TodoSearch from "TodoSearch";
 // var TodoAPI = require("TodoAPI");
+import * as actions from "actions";
 
-var TodoApp = React.createClass({
+export var TodoApp = React.createClass({
     /* state is handled by redux store, it not maintain state itself,
      * so this life cycle is no need */
     // getInitialState: function () {
@@ -81,11 +85,23 @@ var TodoApp = React.createClass({
     //         searchText: searchText.toLowerCase()
     //     });
     // },
-    render: function () {
+    onLogout(e) {
+        var {dispatch} = this.props;
+        e.preventDefault();
+
+        dispatch(actions.startLogout());
+    },
+    render() {
         // var {todos, showCompleted, searchText} = this.state;
         // var filteredTodos = TodoAPI.filterTodos(todos, showCompleted, searchText);
         return (
             <div>
+                <div>
+                    <div className="page-actions">
+                        <a href="#" onClick={this.onLogout}>Logout</a>
+                    </div>
+                </div>
+                
                 <h1 className="page-title">Todo App</h1>
 
                 <div className="row">
@@ -107,4 +123,5 @@ var TodoApp = React.createClass({
     }
 });
 
-module.exports = TodoApp;
+// module.exports = TodoApp;
+export default Redux.connect()(TodoApp);

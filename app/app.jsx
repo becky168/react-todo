@@ -8,12 +8,20 @@ var ReactDOM = require("react-dom");
 var {Provider} = require("react-redux");
 var {Route, Router, IndexRoute, hashHistory} = require("react-router");
 
-var TodoApp = require("TodoApp");
+// var TodoApp = require("TodoApp");
 
 var actions = require("actions");
 var store = require("configureStore").configure();
 
 var TodoAPI = require("TodoAPI");
+
+/*
+ * PS. if you use export default,
+ *     you can just use import,
+ *     require is not work!!
+ */
+import Login from "Login";
+import TodoApp from "TodoApp";
 
 /* test for firebase */
 // import "./../playground/firebase/index";
@@ -98,8 +106,16 @@ Provider:
     are going to able to access the data on the store as well as dispatch actions
 */
 ReactDOM.render(
-    <Provider store={store}>
+    /*<Provider store={store}>
         <TodoApp/>
+    </Provider>*/
+    <Provider store={store}>
+        <Router history={hashHistory}>
+            <Route path="/">
+                <Route path="todos" component={TodoApp} />
+                <IndexRoute component={Login}/>
+            </Route>
+        </Router>
     </Provider>,
     document.getElementById("app")
 );
