@@ -1,5 +1,14 @@
 var webpack = require("webpack");
-var path = require("path"); // built in node.js, there's no need to install it.
+/**
+ * The path module provides utilities for working with file and directory paths.
+ * It is built in node.js, there's no need to install it.
+ */
+var path = require("path");
+/*
+Parse and load environment files (containing ENV variable exports)
+into Node.js environment, i.e. process.env.
+*/
+var envFile = require("node-env-file");
 
 /*
  * 通过NODE_ENV可以来设置环境变量（默认值为development）
@@ -24,6 +33,30 @@ var path = require("path"); // built in node.js, there's no need to install it.
  *   
  */
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
+
+try {
+    /**
+     * load the env file into our file
+     *
+     * envFile(file path): load the file
+     *
+     * The path.join() method joins all given path segments together
+     * using the platform specific separator as a delimiter,
+     * then normalizes the resulting path.
+     *
+     * EX.
+     * path.join('/foo', 'bar', 'baz/asdf', 'quux', '..')
+     * // Returns: '/foo/bar/baz/asdf'
+     * 
+     * __dirname: the path relative to the current path where node is running
+     */
+    envFile(path.join(__dirname, "config/" + process.env.NODE_ENV + ".env"));
+} catch (e) {
+    /*
+     * node-env-file will throw an error
+     * if we try to load the file which is not exist
+     */
+}
 
 module.exports = {
     // entry: "./app/app.jsx", // tell webpack where to start our code
@@ -76,6 +109,27 @@ module.exports = {
         new webpack.optimize.UglifyJsPlugin({
             compressor: {
                 warnings: false
+            }
+        }),
+        /**
+         * DefinePlugin:
+         * let you define variables in bundle.js
+         * 這個 plugin 讓我們可以為我們整個 bundle 建立全域的常數
+         */
+        new webpack.DefinePlugin({
+            /**
+             * define a process variable that have property called env
+             */
+            "process.env": {
+                /**
+                 * we can define all the variable we like
+                 */
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+                API_KEY: JSON.stringify(process.env.API_KEY),
+                AUTH_DOMAIN: JSON.stringify(process.env.AUTH_DOMAIN),
+                DATABASE_URL: JSON.stringify(process.env.DATABASE_URL),
+                STORAGE_BUCKET: JSON.stringify(process.env.STORAGE_BUCKET),
+                MESSAGING_SENDER_ID: JSON.stringify(process.env.MESSAGING_SENDER_ID)
             }
         })
     ],
