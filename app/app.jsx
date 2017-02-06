@@ -33,6 +33,7 @@ import router from "app/router/";
  */
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
+        store.dispatch(actions.login(user.uid));
         /* 
          * some one login
          * redirect to path: todos 
@@ -40,6 +41,7 @@ firebase.auth().onAuthStateChanged((user) => {
         hashHistory.push("/todos");
     } else {
         /* some one logout */
+        store.dispatch(actions.logout());
         hashHistory.push("/");
     }
 });

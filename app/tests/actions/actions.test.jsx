@@ -82,7 +82,7 @@ describe("Actions", () => {
                 text: todoText
             });
             done(); // the test is done
-        }).catch(done); 
+        }).catch(done);
         /*
          * call done with the error object
          * if you call done with any arguments
@@ -127,6 +127,25 @@ describe("Actions", () => {
             updates: {completed: false}
         };
         var res = actions.updateTodo(action.id, action.updates);
+
+        expect(res).toEqual(action);
+    });
+
+    it ("should generate login action object", () => {
+        const action = {
+            type: "LOGIN",
+            uid: "123abc"
+        };
+        const res = actions.login(action.uid);
+
+        expect(res).toEqual(action);
+    });
+
+    it ("should generate logout action object", () => {
+        const action = {
+            type: "LOGOUT"
+        };
+        const res = actions.logout();
 
         expect(res).toEqual(action);
     });
