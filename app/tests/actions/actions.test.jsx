@@ -54,43 +54,43 @@ describe("Actions", () => {
         expect(res).toEqual(action);
     });
 
-    it ("should create todo and dispatch ADD_TODO", (done) => {
-        /*
-         * create an empty mock store
-         * mockStore裡面傳入會使用到的state，但這邊沒有所以放空的
-         */
-        const store = createMockStore({});
-        const todoText = "My todo item";
-        /*
-         * 模擬dispatch action
-         */
-        store.dispatch(actions.startAddTodo(todoText)).then(() => {
-            /*
-             * after the firebase db is all done
-             */
-            /*
-             * getActions: 
-             * Return an array with all of the action we fire on the mock store
-             *  since the store is created.
-             * It is designed for mock store
-             */
-            const actions = store.getActions();
-            expect(actions[0]).toInclude({
-                type: "ADD_TODO"
-            });
-            expect(actions[0].todo).toInclude({
-                text: todoText
-            });
-            done(); // the test is done
-        }).catch(done);
-        /*
-         * call done with the error object
-         * if you call done with any arguments
-         * it will assume the test failed and
-         * will print the argument to the screen with error message
-         */
+    // it ("should create todo and dispatch ADD_TODO", (done) => {
+    //     /*
+    //      * create an empty mock store
+    //      * mockStore裡面傳入會使用到的state，但這邊沒有所以放空的
+    //      */
+    //     const store = createMockStore({});
+    //     const todoText = "My todo item";
+    //     /*
+    //      * 模擬dispatch action
+    //      */
+    //     store.dispatch(actions.startAddTodo(todoText)).then(() => {
+    //         /*
+    //          * after the firebase db is all done
+    //          */
+            
+    //          * getActions: 
+    //          * Return an array with all of the action we fire on the mock store
+    //          *  since the store is created.
+    //          * It is designed for mock store
+             
+    //         const actions = store.getActions();
+    //         expect(actions[0]).toInclude({
+    //             type: "ADD_TODO"
+    //         });
+    //         expect(actions[0].todo).toInclude({
+    //             text: todoText
+    //         });
+    //         done(); // the test is done
+    //     }).catch(done);
+    //     /*
+    //      * call done with the error object
+    //      * if you call done with any arguments
+    //      * it will assume the test failed and
+    //      * will print the argument to the screen with error message
+    //      */
 
-    });
+    // });
 
     it ("should generate add todos action object", () => {
         var todos = [{
@@ -152,6 +152,8 @@ describe("Actions", () => {
 
     describe("Test with firebase todos", () => {
         var testTodoRef;
+        var uid;
+        var todosRef;
 
         /*
          * beforeEach:
@@ -169,18 +171,35 @@ describe("Actions", () => {
             // });
             // /* 可以直接寫成 .then(() => done()) */
 
-            var todosRef = firebaseRef.child("todos");
-            /* 先移除現有的資料再增加測試的資料 */
-            todosRef.remove().then(() => {
-                testTodoRef = firebaseRef.child("todos").push();
+            // var todosRef = firebaseRef.child("todos");
+            // /* 先移除現有的資料再增加測試的資料 */
+            // todosRef.remove().then(() => {
+            //     testTodoRef = firebaseRef.child("todos").push();
+
+            //     return testTodoRef.set({
+            //         text: "Something to do",
+            //         completed: false,
+            //         createdAt: 23453453
+            //     })
+            // })
+            // .then(() => done()) // testTodoRef.set 的 promise
+            // .catch(done);
+
+            firebase.auth().signInAnonymously().then((user) => {
+                uid = user.uid;
+                todosRef = firebaseRef.child(`users/${uid}/todos`);
+
+                return todosRef.remove();
+            }).then(() => {
+                /* remove 的 promise */
+                testTodoRef = todosRef.push();
 
                 return testTodoRef.set({
                     text: "Something to do",
                     completed: false,
                     createdAt: 23453453
-                })
-            })
-            .then(() => done()) // testTodoRef.set 的 promise
+                });
+            }).then(() => done()) // testTodoRef.set 的 promise
             .catch(done);
         });
         /*
@@ -188,11 +207,13 @@ describe("Actions", () => {
          *  define some code to run after every single test
          */
         afterEach((done) => {
-            testTodoRef.remove().then(() => done());
+            // testTodoRef.remove().then(() => done());
+            todosRef.remove().then(() => done());
         });
 
         it ("should toggle todo and dispatch UPDATE_TODO action", (done) => {
-            const store = createMockStore({});
+            // const store = createMockStore({});
+            const store = createMockStore({auth: {uid}});
             const action = actions.startToggleTodo(testTodoRef.key, true);
 
             store.dispatch(action).then(() => {
@@ -218,7 +239,8 @@ describe("Actions", () => {
         });
 
         it ("should populate todos and dispatch ADD_TODOS", (done) => {
-            const store = createMockStore({});
+            // const store = createMockStore({});
+            const store = createMockStore({auth: {uid}});
             const action = actions.startAddTodos();
 
             store.dispatch(action).then(() => {
@@ -230,6 +252,45 @@ describe("Actions", () => {
 
                 done();
             }, done);
+        });
+
+        it ("should create todo and dispatch ADD_TODO", (done) => {
+            /*
+             * create an empty mock store
+             * mockStore裡面傳入會使用到的state，但這邊沒有所以放空的
+             */
+            // const store = createMockStore({});
+            const store = createMockStore({auth: {uid}});
+            const todoText = "My todo item";
+            /*
+             * 模擬dispatch action
+             */
+            store.dispatch(actions.startAddTodo(todoText)).then(() => {
+                /*
+                 * after the firebase db is all done
+                 */
+                /*
+                 * getActions: 
+                 * Return an array with all of the action we fire on the mock store
+                 *  since the store is created.
+                 * It is designed for mock store
+                 */
+                const actions = store.getActions();
+                expect(actions[0]).toInclude({
+                    type: "ADD_TODO"
+                });
+                expect(actions[0].todo).toInclude({
+                    text: todoText
+                });
+                done(); // the test is done
+            }).catch(done);
+            /*
+             * call done with the error object
+             * if you call done with any arguments
+             * it will assume the test failed and
+             * will print the argument to the screen with error message
+             */
+
         });
     });
 });
