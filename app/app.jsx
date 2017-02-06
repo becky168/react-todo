@@ -34,6 +34,7 @@ import router from "app/router/";
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         store.dispatch(actions.login(user.uid));
+        store.dispatch(actions.startAddTodos());
         /* 
          * some one login
          * redirect to path: todos 
@@ -64,7 +65,7 @@ firebase.auth().onAuthStateChanged((user) => {
 /*
  * get all of the data from firebase and pass it to the store
  */
-store.dispatch(actions.startAddTodos());
+// store.dispatch(actions.startAddTodos());
 
 /*
  * react router middlewawre
